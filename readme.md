@@ -2,6 +2,8 @@
 
 Este proyecto inicia PostgreSQL 17 y pgAdmin, y carga automáticamente el esquema `hr` (modelo de ejemplo de Oracle) con sus datos.
 
+No necesitas ejecutar los archivos SQL a mano: al iniciar PostgreSQL por primera vez, Docker monta la carpeta `init/` y la imagen oficial de PostgreSQL ejecuta automáticamente los scripts que encuentra allí. Así se crean las tablas y luego se insertan los datos.
+
 Al terminar la carga tendrás: 5 regiones, 25 países, 23 ubicaciones, 27 departamentos, 19 cargos, 107 empleados y 10 registros en el historial de cargos.
 
 ## Requisitos
@@ -19,7 +21,7 @@ Al terminar la carga tendrás: 5 regiones, 25 países, 23 ubicaciones, 27 depart
     └── hr_populate.sql   # inserta los datos y crea la FK circular dept_mgr_fk
 ```
 
-Los scripts de `init/` se ejecutan en orden alfabético (primero `hr_create.sql`, luego `hr_populate.sql`).
+La carpeta `init/` se monta dentro del contenedor en `/docker-entrypoint-initdb.d`. Durante la inicialización de una base de datos nueva, PostgreSQL ejecuta automáticamente allí los archivos `.sql`, en orden alfabético: primero `hr_create.sql` (crea el esquema y las tablas) y luego `hr_populate.sql` (carga los datos). No hace falta abrir `psql` para esta carga inicial.
 
 ## Comandos en orden
 
@@ -50,6 +52,12 @@ docker compose -f imagen_postgre.yaml exec postgres psql -U admin -d tienda
 > Si en cambio ves `Database directory appears to contain a database; Skipping initialization`, el volumen ya existía de una ejecución anterior y **los scripts de `init/` no se ejecutaron**: las tablas pueden estar vacías o incompletas. En ese caso haz el *Reinicio limpio* (`down -v`).
 >
 > El nombre del servicio es `postgres` (no `postgre`); si lo escribes mal, Compose responde `no such service`.
+
+### ¿Para qué sirve `psql`?
+
+`psql` es el cliente de línea de comandos de PostgreSQL: permite conectarse a una base de datos y ejecutar consultas SQL o comandos propios de PostgreSQL. En los pasos anteriores, `docker compose exec postgres` lo ejecuta dentro del contenedor `postgres`; `-U admin` indica el usuario y `-d tienda` la base de datos. Con `-c "..."` ejecuta la instrucción indicada y vuelve al terminal. Sin `-c`, abre una consola interactiva para escribir varias instrucciones.
+
+Estos comandos usan `psql` para **verificar o consultar** los datos; no son los que realizan la carga automática. La carga la hace PostgreSQL al inicializar por primera vez el volumen.
 
 ### Dentro de `psql`
 
