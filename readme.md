@@ -99,7 +99,7 @@ pgAdmin:
 - Email: `admin@demo.com`
 - Contraseña: `admin123`
 
-Para registrar el servidor en pgAdmin (Register > Server), usa como **Host** `postgres` (el nombre del servicio dentro de la red de Docker) y **no** `localhost`, porque pgAdmin corre en otro contenedor. Puerto `5432`, usuario `admin`, contraseña `admin123`, base de datos `tienda`. Las tablas aparecen en *Schemas > hr > Tables*.
+Para registrar el servidor en pgAdmin (object > Register > Server), usa como **Host** `postgres` (el nombre del servicio dentro de la red de Docker) y **no** `localhost`, porque pgAdmin corre en otro contenedor. Puerto `5432`, usuario `admin`, contraseña `admin123`, base de datos `tienda`. Las tablas aparecen en *Schemas > hr > Tables*.
 
 ## Carga manual
 
