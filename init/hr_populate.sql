@@ -1,10 +1,18 @@
 -- PostgreSQL HR data population
--- Populates the hr schema with the Oracle HR sample model.
+-- Carga los datos del modelo HR (Oracle) en el esquema hr.
+-- Requiere haber ejecutado antes hr_create.sql.
+--
+-- Nota: existe una referencia circular entre EMPLOYEES y DEPARTMENTS
+-- (departments.manager_id -> employees.employee_id). Por eso la FK
+-- dept_mgr_fk se crea al final, una vez cargados los datos.
 
 CREATE SCHEMA IF NOT EXISTS hr;
 SET search_path TO hr, public;
+SET datestyle TO ISO, YMD;
+
 BEGIN;
-  INSERT INTO regions VALUES
+
+INSERT INTO regions VALUES
       ( 10
       , 'Europe'
       );
@@ -28,6 +36,7 @@ BEGIN;
       ( 50
       , 'Africa'
       );
+
   INSERT INTO countries VALUES
       ( 'IT'
       , 'Italy'
@@ -177,6 +186,7 @@ BEGIN;
       , 'Belgium'
       , 10
       );
+
   INSERT INTO locations VALUES
       ( 1000
       , '1297 Via Cola di Rie'
@@ -384,7 +394,6 @@ BEGIN;
       , 'MX'
       );
 
-
   INSERT INTO departments VALUES
       ( 10
       , 'Administration'
@@ -573,6 +582,7 @@ BEGIN;
       , NULL
       , 1700
       );
+
   INSERT INTO jobs VALUES
       ( 'AD_PRES'
       , 'President'
@@ -702,13 +712,14 @@ BEGIN;
       , 4500
       , 10500
       );
+
   INSERT INTO employees VALUES
       ( 100
       , 'Steven'
       , 'King'
       , 'SKING'
       , '1.515.555.0100'
-      , DATE '$3-$2-$1'
+      , DATE '2013-06-17'
       , 'AD_PRES'
       , 24000
       , NULL
@@ -722,7 +733,7 @@ BEGIN;
       , 'Yang'
       , 'NYANG'
       , '1.515.555.0101'
-      , DATE '$3-$2-$1'
+      , DATE '2015-09-21'
       , 'AD_VP'
       , 17000
       , NULL
@@ -736,7 +747,7 @@ BEGIN;
       , 'Garcia'
       , 'LGARCIA'
       , '1.515.555.0102'
-      , DATE '$3-$2-$1'
+      , DATE '2011-01-13'
       , 'AD_VP'
       , 17000
       , NULL
@@ -750,7 +761,7 @@ BEGIN;
       , 'James'
       , 'AJAMES'
       , '1.590.555.0103'
-      , DATE '$3-$2-$1'
+      , DATE '2016-01-03'
       , 'IT_PROG'
       , 9000
       , NULL
@@ -764,7 +775,7 @@ BEGIN;
       , 'Miller'
       , 'BMILLER'
       , '1.590.555.0104'
-      , DATE '$3-$2-$1'
+      , DATE '2017-05-21'
       , 'IT_PROG'
       , 6000
       , NULL
@@ -778,7 +789,7 @@ BEGIN;
       , 'Williams'
       , 'DWILLIAMS'
       , '1.590.555.0105'
-      , DATE '$3-$2-$1'
+      , DATE '2015-06-25'
       , 'IT_PROG'
       , 4800
       , NULL
@@ -792,7 +803,7 @@ BEGIN;
       , 'Jackson'
       , 'VJACKSON'
       , '1.590.555.0106'
-      , DATE '$3-$2-$1'
+      , DATE '2016-02-05'
       , 'IT_PROG'
       , 4800
       , NULL
@@ -806,7 +817,7 @@ BEGIN;
       , 'Nguyen'
       , 'DNGUYEN'
       , '1.590.555.0107'
-      , DATE '$3-$2-$1'
+      , DATE '2017-02-07'
       , 'IT_PROG'
       , 4200
       , NULL
@@ -820,7 +831,7 @@ BEGIN;
       , 'Gruenberg'
       , 'NGRUENBE'
       , '1.515.555.0108'
-      , DATE '$3-$2-$1'
+      , DATE '2012-08-17'
       , 'FI_MGR'
       , 12008
       , NULL
@@ -834,7 +845,7 @@ BEGIN;
       , 'Faviet'
       , 'DFAVIET'
       , '1.515.555.0109'
-      , DATE '$3-$2-$1'
+      , DATE '2012-08-16'
       , 'FI_ACCOUNT'
       , 9000
       , NULL
@@ -848,7 +859,7 @@ BEGIN;
       , 'Chen'
       , 'JCHEN'
       , '1.515.555.0110'
-      , DATE '$3-$2-$1'
+      , DATE '2015-09-28'
       , 'FI_ACCOUNT'
       , 8200
       , NULL
@@ -862,7 +873,7 @@ BEGIN;
       , 'Sciarra'
       , 'ISCIARRA'
       , '1.515.555.0111'
-      , DATE '$3-$2-$1'
+      , DATE '2015-09-30'
       , 'FI_ACCOUNT'
       , 7700
       , NULL
@@ -876,7 +887,7 @@ BEGIN;
       , 'Urman'
       , 'JMURMAN'
       , '1.515.555.0112'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-07'
       , 'FI_ACCOUNT'
       , 7800
       , NULL
@@ -890,7 +901,7 @@ BEGIN;
       , 'Popp'
       , 'LPOPP'
       , '1.515.555.0113'
-      , DATE '$3-$2-$1'
+      , DATE '2017-12-07'
       , 'FI_ACCOUNT'
       , 6900
       , NULL
@@ -904,7 +915,7 @@ BEGIN;
       , 'Li'
       , 'DLI'
       , '1.515.555.0114'
-      , DATE '$3-$2-$1'
+      , DATE '2012-12-07'
       , 'PU_MAN'
       , 11000
       , NULL
@@ -918,7 +929,7 @@ BEGIN;
       , 'Khoo'
       , 'AKHOO'
       , '1.515.555.0115'
-      , DATE '$3-$2-$1'
+      , DATE '2013-05-18'
       , 'PU_CLERK'
       , 3100
       , NULL
@@ -932,7 +943,7 @@ BEGIN;
       , 'Baida'
       , 'SBAIDA'
       , '1.515.555.0116'
-      , DATE '$3-$2-$1'
+      , DATE '2015-12-24'
       , 'PU_CLERK'
       , 2900
       , NULL
@@ -946,7 +957,7 @@ BEGIN;
       , 'Tobias'
       , 'STOBIAS'
       , '1.515.555.0117'
-      , DATE '$3-$2-$1'
+      , DATE '2015-07-24'
       , 'PU_CLERK'
       , 2800
       , NULL
@@ -960,7 +971,7 @@ BEGIN;
       , 'Himuro'
       , 'GHIMURO'
       , '1.515.555.0118'
-      , DATE '$3-$2-$1'
+      , DATE '2016-11-15'
       , 'PU_CLERK'
       , 2600
       , NULL
@@ -974,7 +985,7 @@ BEGIN;
       , 'Colmenares'
       , 'KCOLMENA'
       , '1.515.555.0119'
-      , DATE '$3-$2-$1'
+      , DATE '2017-08-10'
       , 'PU_CLERK'
       , 2500
       , NULL
@@ -988,7 +999,7 @@ BEGIN;
       , 'Weiss'
       , 'MWEISS'
       , '1.650.555.0120'
-      , DATE '$3-$2-$1'
+      , DATE '2014-07-18'
       , 'ST_MAN'
       , 8000
       , NULL
@@ -1002,7 +1013,7 @@ BEGIN;
       , 'Fripp'
       , 'AFRIPP'
       , '1.650.555.0121'
-      , DATE '$3-$2-$1'
+      , DATE '2015-04-10'
       , 'ST_MAN'
       , 8200
       , NULL
@@ -1016,7 +1027,7 @@ BEGIN;
       , 'Kaufling'
       , 'PKAUFLIN'
       , '1.650.555.0122'
-      , DATE '$3-$2-$1'
+      , DATE '2013-05-01'
       , 'ST_MAN'
       , 7900
       , NULL
@@ -1030,7 +1041,7 @@ BEGIN;
       , 'Vollman'
       , 'SVOLLMAN'
       , '1.650.555.0123'
-      , DATE '$3-$2-$1'
+      , DATE '2015-10-10'
       , 'ST_MAN'
       , 6500
       , NULL
@@ -1044,7 +1055,7 @@ BEGIN;
       , 'Mourgos'
       , 'KMOURGOS'
       , '1.650.555.0124'
-      , DATE '$3-$2-$1'
+      , DATE '2017-11-16'
       , 'ST_MAN'
       , 5800
       , NULL
@@ -1058,7 +1069,7 @@ BEGIN;
       , 'Nayer'
       , 'JNAYER'
       , '1.650.555.0125'
-      , DATE '$3-$2-$1'
+      , DATE '2015-07-16'
       , 'ST_CLERK'
       , 3200
       , NULL
@@ -1072,7 +1083,7 @@ BEGIN;
       , 'Mikkilineni'
       , 'IMIKKILI'
       , '1.650.555.0126'
-      , DATE '$3-$2-$1'
+      , DATE '2016-09-28'
       , 'ST_CLERK'
       , 2700
       , NULL
@@ -1086,7 +1097,7 @@ BEGIN;
       , 'Landry'
       , 'JLANDRY'
       , '1.650.555.0127'
-      , DATE '$3-$2-$1'
+      , DATE '2017-01-14'
       , 'ST_CLERK'
       , 2400
       , NULL
@@ -1100,7 +1111,7 @@ BEGIN;
       , 'Markle'
       , 'SMARKLE'
       , '1.650.555.0128'
-      , DATE '$3-$2-$1'
+      , DATE '2018-03-08'
       , 'ST_CLERK'
       , 2200
       , NULL
@@ -1114,7 +1125,7 @@ BEGIN;
       , 'Bissot'
       , 'LBISSOT'
       , '1.650.555.0129'
-      , DATE '$3-$2-$1'
+      , DATE '2015-08-20'
       , 'ST_CLERK'
       , 3300
       , NULL
@@ -1128,7 +1139,7 @@ BEGIN;
       , 'Atkinson'
       , 'MATKINSO'
       , '1.650.555.0130'
-      , DATE '$3-$2-$1'
+      , DATE '2015-10-30'
       , 'ST_CLERK'
       , 2800
       , NULL
@@ -1142,7 +1153,7 @@ BEGIN;
       , 'Marlow'
       , 'JAMRLOW'
       , '1.650.555.0131'
-      , DATE '$3-$2-$1'
+      , DATE '2015-02-16'
       , 'ST_CLERK'
       , 2500
       , NULL
@@ -1156,7 +1167,7 @@ BEGIN;
       , 'Olson'
       , 'TJOLSON'
       , '1.650.555.0132'
-      , DATE '$3-$2-$1'
+      , DATE '2017-04-10'
       , 'ST_CLERK'
       , 2100
       , NULL
@@ -1170,7 +1181,7 @@ BEGIN;
       , 'Mallin'
       , 'JMALLIN'
       , '1.650.555.0133'
-      , DATE '$3-$2-$1'
+      , DATE '2014-06-14'
       , 'ST_CLERK'
       , 3300
       , NULL
@@ -1184,7 +1195,7 @@ BEGIN;
       , 'Rogers'
       , 'MROGERS'
       , '1.650.555.0134'
-      , DATE '$3-$2-$1'
+      , DATE '2016-08-26'
       , 'ST_CLERK'
       , 2900
       , NULL
@@ -1198,7 +1209,7 @@ BEGIN;
       , 'Gee'
       , 'KGEE'
       , '1.650.555.0135'
-      , DATE '$3-$2-$1'
+      , DATE '2017-12-12'
       , 'ST_CLERK'
       , 2400
       , NULL
@@ -1212,7 +1223,7 @@ BEGIN;
       , 'Philtanker'
       , 'HPHILTAN'
       , '1.650.555.0136'
-      , DATE '$3-$2-$1'
+      , DATE '2018-02-06'
       , 'ST_CLERK'
       , 2200
       , NULL
@@ -1226,7 +1237,7 @@ BEGIN;
       , 'Ladwig'
       , 'RLADWIG'
       , '1.650.555.0137'
-      , DATE '$3-$2-$1'
+      , DATE '2013-07-14'
       , 'ST_CLERK'
       , 3600
       , NULL
@@ -1240,7 +1251,7 @@ BEGIN;
       , 'Stiles'
       , 'SSTILES'
       , '1.650.555.0138'
-      , DATE '$3-$2-$1'
+      , DATE '2015-10-26'
       , 'ST_CLERK'
       , 3200
       , NULL
@@ -1254,7 +1265,7 @@ BEGIN;
       , 'Seo'
       , 'JSEO'
       , '1.650.555.0139'
-      , DATE '$3-$2-$1'
+      , DATE '2016-02-12'
       , 'ST_CLERK'
       , 2700
       , NULL
@@ -1268,7 +1279,7 @@ BEGIN;
       , 'Patel'
       , 'JPATEL'
       , '1.650.555.0140'
-      , DATE '$3-$2-$1'
+      , DATE '2016-04-06'
       , 'ST_CLERK'
       , 2500
       , NULL
@@ -1282,7 +1293,7 @@ BEGIN;
       , 'Rajs'
       , 'TRAJS'
       , '1.650.555.0141'
-      , DATE '$3-$2-$1'
+      , DATE '2013-10-17'
       , 'ST_CLERK'
       , 3500
       , NULL
@@ -1296,7 +1307,7 @@ BEGIN;
       , 'Davies'
       , 'CDAVIES'
       , '1.650.555.0142'
-      , DATE '$3-$2-$1'
+      , DATE '2015-01-29'
       , 'ST_CLERK'
       , 3100
       , NULL
@@ -1310,7 +1321,7 @@ BEGIN;
       , 'Matos'
       , 'RMATOS'
       , '1.650.555.0143'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-15'
       , 'ST_CLERK'
       , 2600
       , NULL
@@ -1324,7 +1335,7 @@ BEGIN;
       , 'Vargas'
       , 'PVARGAS'
       , '1.650.555.0144'
-      , DATE '$3-$2-$1'
+      , DATE '2016-07-09'
       , 'ST_CLERK'
       , 2500
       , NULL
@@ -1338,7 +1349,7 @@ BEGIN;
       , 'Singh'
       , 'JSINGH'
       , '44.1632.960000'
-      , DATE '$3-$2-$1'
+      , DATE '2014-10-01'
       , 'SA_MAN'
       , 14000
       , .4
@@ -1352,7 +1363,7 @@ BEGIN;
       , 'Partners'
       , 'KPARTNER'
       , '44.1632.960001'
-      , DATE '$3-$2-$1'
+      , DATE '2015-01-05'
       , 'SA_MAN'
       , 13500
       , .3
@@ -1366,7 +1377,7 @@ BEGIN;
       , 'Errazuriz'
       , 'AERRAZUR'
       , '44.1632.960002'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-10'
       , 'SA_MAN'
       , 12000
       , .3
@@ -1380,7 +1391,7 @@ BEGIN;
       , 'Cambrault'
       , 'GCAMBRAU'
       , '44.1632.960003'
-      , DATE '$3-$2-$1'
+      , DATE '2017-10-15'
       , 'SA_MAN'
       , 11000
       , .3
@@ -1394,7 +1405,7 @@ BEGIN;
       , 'Zlotkey'
       , 'EZLOTKEY'
       , '44.1632.960004'
-      , DATE '$3-$2-$1'
+      , DATE '2018-01-29'
       , 'SA_MAN'
       , 10500
       , .2
@@ -1408,7 +1419,7 @@ BEGIN;
       , 'Tucker'
       , 'STUCKER'
       , '44.1632.960005'
-      , DATE '$3-$2-$1'
+      , DATE '2015-01-30'
       , 'SA_REP'
       , 10000
       , .3
@@ -1422,7 +1433,7 @@ BEGIN;
       , 'Bernstein'
       , 'DBERNSTE'
       , '44.1632.960006'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-24'
       , 'SA_REP'
       , 9500
       , .25
@@ -1436,7 +1447,7 @@ BEGIN;
       , 'Hall'
       , 'PHALL'
       , '44.1632.960007'
-      , DATE '$3-$2-$1'
+      , DATE '2015-08-20'
       , 'SA_REP'
       , 9000
       , .25
@@ -1450,7 +1461,7 @@ BEGIN;
       , 'Olsen'
       , 'COLSEN'
       , '44.1632.960008'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-30'
       , 'SA_REP'
       , 8000
       , .2
@@ -1464,7 +1475,7 @@ BEGIN;
       , 'Cambrault'
       , 'NCAMBRAU'
       , '44.1632.960009'
-      , DATE '$3-$2-$1'
+      , DATE '2016-12-09'
       , 'SA_REP'
       , 7500
       , .2
@@ -1478,7 +1489,7 @@ BEGIN;
       , 'Tuvault'
       , 'OTUVAULT'
       , '44.1632.960010'
-      , DATE '$3-$2-$1'
+      , DATE '2017-11-23'
       , 'SA_REP'
       , 7000
       , .15
@@ -1492,7 +1503,7 @@ BEGIN;
       , 'King'
       , 'JKING'
       , '44.1632.960011'
-      , DATE '$3-$2-$1'
+      , DATE '2014-01-30'
       , 'SA_REP'
       , 10000
       , .35
@@ -1506,7 +1517,7 @@ BEGIN;
       , 'Sully'
       , 'PSULLY'
       , '44.1632.960012'
-      , DATE '$3-$2-$1'
+      , DATE '2014-03-04'
       , 'SA_REP'
       , 9500
       , .35
@@ -1520,7 +1531,7 @@ BEGIN;
       , 'McEwen'
       , 'AMCEWEN'
       , '44.1632.960013'
-      , DATE '$3-$2-$1'
+      , DATE '2014-08-01'
       , 'SA_REP'
       , 9000
       , .35
@@ -1534,7 +1545,7 @@ BEGIN;
       , 'Smith'
       , 'LSMITH'
       , '44.1632.960014'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-10'
       , 'SA_REP'
       , 8000
       , .3
@@ -1548,7 +1559,7 @@ BEGIN;
       , 'Doran'
       , 'LDORAN'
       , '44.1632.960015'
-      , DATE '$3-$2-$1'
+      , DATE '2015-12-15'
       , 'SA_REP'
       , 7500
       , .3
@@ -1562,7 +1573,7 @@ BEGIN;
       , 'Sewall'
       , 'SSEWALL'
       , '44.1632.960016'
-      , DATE '$3-$2-$1'
+      , DATE '2016-11-03'
       , 'SA_REP'
       , 7000
       , .25
@@ -1576,7 +1587,7 @@ BEGIN;
       , 'Vishney'
       , 'CVISHNEY'
       , '44.1632.960017'
-      , DATE '$3-$2-$1'
+      , DATE '2015-11-11'
       , 'SA_REP'
       , 10500
       , .25
@@ -1590,7 +1601,7 @@ BEGIN;
       , 'Greene'
       , 'DGREENE'
       , '44.1632.960018'
-      , DATE '$3-$2-$1'
+      , DATE '2017-03-19'
       , 'SA_REP'
       , 9500
       , .15
@@ -1604,7 +1615,7 @@ BEGIN;
       , 'Marvins'
       , 'MMARVINS'
       , '44.1632.960019'
-      , DATE '$3-$2-$1'
+      , DATE '2018-01-24'
       , 'SA_REP'
       , 7200
       , .10
@@ -1618,7 +1629,7 @@ BEGIN;
       , 'Lee'
       , 'DLEE'
       , '44.1632.960020'
-      , DATE '$3-$2-$1'
+      , DATE '2018-02-23'
       , 'SA_REP'
       , 6800
       , .1
@@ -1632,7 +1643,7 @@ BEGIN;
       , 'Ande'
       , 'SANDE'
       , '44.1632.960021'
-      , DATE '$3-$2-$1'
+      , DATE '2018-03-24'
       , 'SA_REP'
       , 6400
       , .10
@@ -1646,7 +1657,7 @@ BEGIN;
       , 'Banda'
       , 'ABANDA'
       , '44.1632.960022'
-      , DATE '$3-$2-$1'
+      , DATE '2018-04-21'
       , 'SA_REP'
       , 6200
       , .10
@@ -1660,7 +1671,7 @@ BEGIN;
       , 'Ozer'
       , 'LOZER'
       , '44.1632.960023'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-11'
       , 'SA_REP'
       , 11500
       , .25
@@ -1674,7 +1685,7 @@ BEGIN;
       , 'Bloom'
       , 'HBLOOM'
       , '44.1632.960024'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-23'
       , 'SA_REP'
       , 10000
       , .20
@@ -1688,7 +1699,7 @@ BEGIN;
       , 'Fox'
       , 'TFOX'
       , '44.1632.960025'
-      , DATE '$3-$2-$1'
+      , DATE '2016-01-24'
       , 'SA_REP'
       , 9600
       , .20
@@ -1702,7 +1713,7 @@ BEGIN;
       , 'Smith'
       , 'WSMITH'
       , '44.1632.960026'
-      , DATE '$3-$2-$1'
+      , DATE '2017-02-23'
       , 'SA_REP'
       , 7400
       , .15
@@ -1716,7 +1727,7 @@ BEGIN;
       , 'Bates'
       , 'EBATES'
       , '44.1632.960027'
-      , DATE '$3-$2-$1'
+      , DATE '2017-03-24'
       , 'SA_REP'
       , 7300
       , .15
@@ -1730,7 +1741,7 @@ BEGIN;
       , 'Kumar'
       , 'SKUMAR'
       , '44.1632.960028'
-      , DATE '$3-$2-$1'
+      , DATE '2018-04-21'
       , 'SA_REP'
       , 6100
       , .10
@@ -1744,7 +1755,7 @@ BEGIN;
       , 'Abel'
       , 'EABEL'
       , '44.1632.960029'
-      , DATE '$3-$2-$1'
+      , DATE '2014-05-11'
       , 'SA_REP'
       , 11000
       , .30
@@ -1758,7 +1769,7 @@ BEGIN;
       , 'Hutton'
       , 'AHUTTON'
       , '44.1632.960030'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-19'
       , 'SA_REP'
       , 8800
       , .25
@@ -1772,7 +1783,7 @@ BEGIN;
       , 'Taylor'
       , 'JTAYLOR'
       , '44.1632.960031'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-24'
       , 'SA_REP'
       , 8600
       , .20
@@ -1786,7 +1797,7 @@ BEGIN;
       , 'Livingston'
       , 'JLIVINGS'
       , '44.1632.960032'
-      , DATE '$3-$2-$1'
+      , DATE '2016-04-23'
       , 'SA_REP'
       , 8400
       , .20
@@ -1800,7 +1811,7 @@ BEGIN;
       , 'Grant'
       , 'KGRANT'
       , '44.1632.960033'
-      , DATE '$3-$2-$1'
+      , DATE '2017-05-24'
       , 'SA_REP'
       , 7000
       , .15
@@ -1814,7 +1825,7 @@ BEGIN;
       , 'Johnson'
       , 'CJOHNSON'
       , '44.1632.960034'
-      , DATE '$3-$2-$1'
+      , DATE '2018-01-04'
       , 'SA_REP'
       , 6200
       , .10
@@ -1828,7 +1839,7 @@ BEGIN;
       , 'Taylor'
       , 'WTAYLOR'
       , '1.650.555.0145'
-      , DATE '$3-$2-$1'
+      , DATE '2016-01-24'
       , 'SH_CLERK'
       , 3200
       , NULL
@@ -1842,7 +1853,7 @@ BEGIN;
       , 'Fleaur'
       , 'JFLEAUR'
       , '1.650.555.0146'
-      , DATE '$3-$2-$1'
+      , DATE '2016-02-23'
       , 'SH_CLERK'
       , 3100
       , NULL
@@ -1856,7 +1867,7 @@ BEGIN;
       , 'Sullivan'
       , 'MSULLIVA'
       , '1.650.555.0147'
-      , DATE '$3-$2-$1'
+      , DATE '2017-06-21'
       , 'SH_CLERK'
       , 2500
       , NULL
@@ -1870,7 +1881,7 @@ BEGIN;
       , 'Geoni'
       , 'GGEONI'
       , '1.650.555.0148'
-      , DATE '$3-$2-$1'
+      , DATE '2018-02-03'
       , 'SH_CLERK'
       , 2800
       , NULL
@@ -1884,7 +1895,7 @@ BEGIN;
       , 'Sarchand'
       , 'NSARCHAN'
       , '1.650.555.0149'
-      , DATE '$3-$2-$1'
+      , DATE '2014-01-27'
       , 'SH_CLERK'
       , 4200
       , NULL
@@ -1898,7 +1909,7 @@ BEGIN;
       , 'Bull'
       , 'ABULL'
       , '1.650.555.0150'
-      , DATE '$3-$2-$1'
+      , DATE '2015-02-20'
       , 'SH_CLERK'
       , 4100
       , NULL
@@ -1912,7 +1923,7 @@ BEGIN;
       , 'Dellinger'
       , 'JDELLING'
       , '1.650.555.0151'
-      , DATE '$3-$2-$1'
+      , DATE '2016-06-24'
       , 'SH_CLERK'
       , 3400
       , NULL
@@ -1926,7 +1937,7 @@ BEGIN;
       , 'Cabrio'
       , 'ACABRIO'
       , '1.650.555.0152'
-      , DATE '$3-$2-$1'
+      , DATE '2017-02-07'
       , 'SH_CLERK'
       , 3000
       , NULL
@@ -1940,7 +1951,7 @@ BEGIN;
       , 'Chung'
       , 'KCHUNG'
       , '1.650.555.0153'
-      , DATE '$3-$2-$1'
+      , DATE '2015-06-14'
       , 'SH_CLERK'
       , 3800
       , NULL
@@ -1954,7 +1965,7 @@ BEGIN;
       , 'Dilly'
       , 'JDILLY'
       , '1.650.555.0154'
-      , DATE '$3-$2-$1'
+      , DATE '2015-08-13'
       , 'SH_CLERK'
       , 3600
       , NULL
@@ -1968,7 +1979,7 @@ BEGIN;
       , 'Venzl'
       , 'TVENZL'
       , '1.650.555.0155'
-      , DATE '$3-$2-$1'
+      , DATE '2016-07-11'
       , 'SH_CLERK'
       , 2900
       , NULL
@@ -1982,7 +1993,7 @@ BEGIN;
       , 'Perkins'
       , 'RPERKINS'
       , '1.650.555.0156'
-      , DATE '$3-$2-$1'
+      , DATE '2017-12-19'
       , 'SH_CLERK'
       , 2500
       , NULL
@@ -1996,7 +2007,7 @@ BEGIN;
       , 'Bell'
       , 'SBELL'
       , '1.650.555.0157'
-      , DATE '$3-$2-$1'
+      , DATE '2014-02-04'
       , 'SH_CLERK'
       , 4000
       , NULL
@@ -2010,7 +2021,7 @@ BEGIN;
       , 'Everett'
       , 'BEVERETT'
       , '1.650.555.0158'
-      , DATE '$3-$2-$1'
+      , DATE '2015-03-03'
       , 'SH_CLERK'
       , 3900
       , NULL
@@ -2024,7 +2035,7 @@ BEGIN;
       , 'McLeod'
       , 'SMCLEOD'
       , '1.650.555.0159'
-      , DATE '$3-$2-$1'
+      , DATE '2016-07-01'
       , 'SH_CLERK'
       , 3200
       , NULL
@@ -2038,7 +2049,7 @@ BEGIN;
       , 'Jones'
       , 'VJONES'
       , '1.650.555.0160'
-      , DATE '$3-$2-$1'
+      , DATE '2017-03-17'
       , 'SH_CLERK'
       , 2800
       , NULL
@@ -2052,7 +2063,7 @@ BEGIN;
       , 'Walsh'
       , 'AWALSH'
       , '1.650.555.0161'
-      , DATE '$3-$2-$1'
+      , DATE '2016-04-24'
       , 'SH_CLERK'
       , 3100
       , NULL
@@ -2066,7 +2077,7 @@ BEGIN;
       , 'Feeney'
       , 'KFEENEY'
       , '1.650.555.0162'
-      , DATE '$3-$2-$1'
+      , DATE '2016-05-23'
       , 'SH_CLERK'
       , 3000
       , NULL
@@ -2080,7 +2091,7 @@ BEGIN;
       , 'OConnell'
       , 'DOCONNEL'
       , '1.650.555.0163'
-      , DATE '$3-$2-$1'
+      , DATE '2017-06-21'
       , 'SH_CLERK'
       , 2600
       , NULL
@@ -2094,7 +2105,7 @@ BEGIN;
       , 'Grant'
       , 'DGRANT'
       , '1.650.555.0164'
-      , DATE '$3-$2-$1'
+      , DATE '2018-01-13'
       , 'SH_CLERK'
       , 2600
       , NULL
@@ -2108,7 +2119,7 @@ BEGIN;
       , 'Whalen'
       , 'JWHALEN'
       , '1.515.555.0165'
-      , DATE '$3-$2-$1'
+      , DATE '2013-09-17'
       , 'AD_ASST'
       , 4400
       , NULL
@@ -2122,7 +2133,7 @@ BEGIN;
       , 'Martinez'
       , 'MMARTINE'
       , '1.515.555.0166'
-      , DATE '$3-$2-$1'
+      , DATE '2014-02-17'
       , 'MK_MAN'
       , 13000
       , NULL
@@ -2136,7 +2147,7 @@ BEGIN;
       , 'Davis'
       , 'PDAVIS'
       , '1.603.555.0167'
-      , DATE '$3-$2-$1'
+      , DATE '2015-08-17'
       , 'MK_REP'
       , 6000
       , NULL
@@ -2150,7 +2161,7 @@ BEGIN;
       , 'Jacobs'
       , 'SJACOBS'
       , '1.515.555.0168'
-      , DATE '$3-$2-$1'
+      , DATE '2012-06-07'
       , 'HR_REP'
       , 6500
       , NULL
@@ -2164,7 +2175,7 @@ BEGIN;
       , 'Brown'
       , 'HBROWN'
       , '1.515.555.0169'
-      , DATE '$3-$2-$1'
+      , DATE '2012-06-07'
       , 'PR_REP'
       , 10000
       , NULL
@@ -2178,7 +2189,7 @@ BEGIN;
       , 'Higgins'
       , 'SHIGGINS'
       , '1.515.555.0170'
-      , DATE '$3-$2-$1'
+      , DATE '2012-06-07'
       , 'AC_MGR'
       , 12008
       , NULL
@@ -2192,87 +2203,92 @@ BEGIN;
       , 'Gietz'
       , 'WGIETZ'
       , '1.515.555.0171'
-      , DATE '$3-$2-$1'
+      , DATE '2012-06-07'
       , 'AC_ACCOUNT'
       , 8300
       , NULL
       , 205
       , 110
       );
+
   INSERT INTO job_history
   VALUES (102
-       , DATE '$3-$2-$1'
-       , DATE '$3-$2-$1'
+       , DATE '2011-01-13'
+       , DATE '2016-07-24'
        , 'IT_PROG'
        , 60);
 
   INSERT INTO job_history
   VALUES (101
-       , DATE '$3-$2-$1'
-       , DATE '$3-$2-$1'
+       , DATE '2007-09-21'
+       , DATE '2011-10-27'
        , 'AC_ACCOUNT'
        , 110);
 
   INSERT INTO job_history
   VALUES (101
-       , DATE '$3-$2-$1'
-       , DATE '$3-$2-$1'
+       , DATE '2011-10-28'
+       , DATE '2015-03-15'
        , 'AC_MGR'
        , 110);
 
   INSERT INTO job_history
   VALUES (201
-       , DATE '$3-$2-$1'
-       , DATE '$3-$2-$1'
+       , DATE '2014-02-17'
+       , DATE '2017-12-19'
        , 'MK_REP'
        , 20);
 
   INSERT INTO job_history
   VALUES  (114
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-24'
+      , DATE '2017-12-31'
       , 'ST_CLERK'
       , 50
       );
 
   INSERT INTO job_history
   VALUES  (122
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2017-01-01'
+      , DATE '2017-12-31'
       , 'ST_CLERK'
       , 50
       );
 
   INSERT INTO job_history
   VALUES  (200
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2005-09-17'
+      , DATE '2011-06-17'
       , 'AD_ASST'
       , 90
       );
 
   INSERT INTO job_history
   VALUES  (176
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2016-03-24'
+      , DATE '2016-12-31'
       , 'SA_REP'
       , 80
       );
 
   INSERT INTO job_history
   VALUES  (176
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2017-01-01'
+      , DATE '2017-12-31'
       , 'SA_MAN'
       , 80
       );
 
   INSERT INTO job_history
   VALUES  (200
-      , DATE '$3-$2-$1'
-      , DATE '$3-$2-$1'
+      , DATE '2012-07-01'
+      , DATE '2016-12-31'
       , 'AC_ACCOUNT'
       , 90
       );
-ALTER TABLE departments ADD CONSTRAINT dept_mgr_fk FOREIGN KEY (manager_id) REFERENCES employees(employee_id);
+
+ALTER TABLE departments
+    ADD CONSTRAINT dept_mgr_fk FOREIGN KEY (manager_id)
+    REFERENCES employees(employee_id);
+
 COMMIT;
